@@ -1,5 +1,7 @@
 package sample;
 
+import java.lang.Math.*;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,7 +22,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("MwSt Rechner");
 
         //Create Layout
         GridPane grid = new GridPane();
@@ -42,7 +44,7 @@ public class Main extends Application {
         outputTitle.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
         grid.add(outputTitle,0,2);
 
-        javafx.scene.control.Label valueLabel = new javafx.scene.control.Label("Wert: ");
+        javafx.scene.control.Label valueLabel = new javafx.scene.control.Label("Netto: ");
         grid.add(valueLabel,0,3);
 
         javafx.scene.control.Label calculatedLabel = new javafx.scene.control.Label("0");
@@ -52,13 +54,32 @@ public class Main extends Application {
         grid.add(mwstLabel,0,4);
 
         javafx.scene.control.Label calculatedMWST = new javafx.scene.control.Label("0");
-        grid.add(calculatedMWST,1,3);
+        grid.add(calculatedMWST,1,4);
 
         javafx.scene.control.Button btn = new javafx.scene.control.Button("Berechne");
         grid.add(btn,1,5);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        btn.setOnAction(e -> {
+            double mwst = Main.calculateMWST(Double.valueOf(inputTextField.getText()));
+            double brutto = Main.calculateNetto(Double.valueOf(inputTextField.getText()));
+            calculatedLabel.setText(String.valueOf(brutto));
+            calculatedMWST.setText(String.valueOf(mwst));
+        });
+
+
+        }
+        public static double calculateMWST(double value){
+            double y = value/119;
+            double mwst = y*19;
+            return Math.round(mwst*100.00)/100.00;
+        }
+        public static double calculateNetto(double value){
+            double y = value/119;
+            double netto = y*100;
+            return Math.round(netto*100.00)/100.00;
         }
 
 
